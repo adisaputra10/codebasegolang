@@ -6,6 +6,7 @@ pipeline {
 
         string(name: 'DOCKER_IMAGE_NAME',          description: 'Docker Image Name',                    defaultValue: 'image')
     }
+	
     agent any
     stages {
 
@@ -29,9 +30,11 @@ pipeline {
             steps {
                 script{
                             if ( env.BRANCH_NAME == 'master' ){
-                                envStage = "Production"
+				    projectKubernetes= "${params.PRODUCTION_NAMESPACE}"
+                                envStage = "production"
                             }else if ( env.BRANCH_NAME == 'development'){
-                                envStage = "Development"
+				projectKubernetes= "${params.DEVELOPMENT_NAMESPACE}"
+                                envStage = "development"
                     }   } 
                 
             }
@@ -72,11 +75,21 @@ pipeline {
 
        stage('Deploy') {
             steps {
-                sh 'echo "Hello World"'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
+		    script{
+                	   echo "Login Docker Registry"
+		         withCredentials([string(credentialsId: 'kubernetes_token', variable: 'TOKEN')]) {
+        			sh "docker login docker-registry-default.apps-kubernetes.bkn.go.id -u jenkins -p ${TOKEN}"
+				 
+				 imagefinal = "docker-registry-default.apps-kubernetes.bkn.go.id/${projectKubernetes}/${params.DOCKER_IMAGE_NAME}"
+				 sh "docker tag ${params.DOCKER_IMAGE_NAME}:${BUILD_NUMBER}-${commitId} ${imagefinal}:latest"
+				 sh  "docker push  ${imagefinal}:latest"
+				 if ( env.BRANCH_NAME == 'master' ){
+				      sh "docker tag ${params.DOCKER_IMAGE_NAME}:${BUILD_NUMBER}-${commitId} ${imagefinal}:prod-${BUILD_NUMBER}"
+				      sh  "docker push ${imagefinal}:prod-${BUILD_NUMBER}"
+                                 }
+    			}
+		    }
+		    
             }
         }
 
