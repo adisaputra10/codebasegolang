@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"gitlab.playcourt.id/new-mypertamina/myptm-external-insurance-service/src/helper/util"
+	"github.com/adisaputra10/codebasegolang/src/helper/util"
 )
 
 func TestToISODate(t *testing.T) {

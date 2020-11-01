@@ -1,9 +1,8 @@
-module gitlab.playcourt.id/new-mypertamina/myptm-external-insurance-service
+module github.com/adisaputra10/codebasegolang
 
 go 1.13
 
 require (
-	github.com/Shopify/sarama v1.26.1
 	github.com/certifi/gocertifi v0.0.0-20200211180108-c7c1fbc02894 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/getsentry/raven-go v0.2.0 // indirect

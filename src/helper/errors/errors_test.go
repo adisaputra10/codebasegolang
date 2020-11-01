@@ -8,7 +8,7 @@ import (
 
 	er "errors"
 
-	e "gitlab.playcourt.id/new-mypertamina/myptm-external-insurance-service/src/helper/errors"
+	e "github.com/adisaputra10/codebasegolang/src/helper/errors"
 )
 
 func TestGetHTTPStatusCodeByError(t *testing.T) {

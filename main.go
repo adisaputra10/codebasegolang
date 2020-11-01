@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"gitlab.playcourt.id/new-mypertamina/myptm-external-insurance-service/src/helper/wrapper"
-	"gitlab.playcourt.id/new-mypertamina/myptm-external-insurance-service/src/helper/errors"
+	"github.com/adisaputra10/codebasegolang/src/helper/wrapper"
+	"github.com/adisaputra10/codebasegolang/src/helper/errors"
 	"github.com/gorilla/mux"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/rs/cors"
