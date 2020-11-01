@@ -1,4 +1,5 @@
-module gitlab.playcourt.id/new-mypertamina/myptm-external-insurance-service
+module github.com/adisaputra10/codebasegolang
+
 
 go 1.13
 
