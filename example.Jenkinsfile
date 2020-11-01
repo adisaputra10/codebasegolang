@@ -1,16 +1,12 @@
-@Library('shared-library')_
-def deployImage = new DeployImage()
-env.nodeName = ""
+
 
 pipeline {
     parameters {
-        string(name: 'PRODUCTION_NAMESPACE',       description: 'Production Namespace',                 defaultValue: 'mypertamina20-prod')
-        string(name: 'STAGING_NAMESPACE',          description: 'Staging Namespace',                    defaultValue: 'mypertamina20-stage')
-        string(name: 'DEVELOPMENT_NAMESPACE',      description: 'Development Namespace',                defaultValue: 'mypertamina20-dev')
+        string(name: 'PRODUCTION_NAMESPACE',       description: 'Production Namespace',                 defaultValue: 'namaproject-prod')
 
-        string(name: 'DOCKER_IMAGE_NAME',          description: 'Docker Image Name',                    defaultValue: 'myptm-external-insurance-api')
+        string(name: 'DEVELOPMENT_NAMESPACE',      description: 'Development Namespace',                defaultValue: 'namaproject-dev')
 
-        string(name: 'CHAT_ID',                    description: 'chat id of telegram group',            defaultValue: '-1001215679728')
+        string(name: 'DOCKER_IMAGE_NAME',          description: 'Docker Image Name',                    defaultValue: 'image')
     }
     agent none
     options {
@@ -48,9 +44,7 @@ pipeline {
                         script{
                             if ( env.BRANCH_NAME == 'master' ){
                                 envStage = "Production"
-                            } else if ( env.BRANCH_NAME == 'release' ){
-                                envStage = "Staging"
-                            } else if ( env.BRANCH_NAME == 'develop'){
+                            }else if ( env.BRANCH_NAME == 'development'){
                                 envStage = "Development"
         }   }   }   }   }   }
         stage('Test & Build') {
@@ -61,8 +55,6 @@ pipeline {
                         unstash 'ws'
                         script {
                             echo "Do Unit Test Here"
-                        
-                           sh 'docker run --rm -v $PWD:/build -w /build telkomindonesia/alpine:go-1.13  /bin/sh -c "make test"'
                             echo "defining sonar-scanner"
                             def scannerHome = tool 'SonarScanner' ;
                             withSonarQubeEnv('SonarQube') {
@@ -81,20 +73,12 @@ pipeline {
                 node (nodeName as String) { 
                     echo "Running on ${nodeName}"
                     script{
-                        if (env.BRANCH_NAME == 'master'){
-                            echo "Deploying to ${envStage} "
-                            deployImage.to_myp("${commitId}")
-                        } else if (env.BRANCH_NAME == 'release'){
-                            echo "Deploying to ${envStage} "
-                            deployImage.to_stagemyp("${commitId}")
-                        } else if (env.BRANCH_NAME == 'develop'){
-                            echo "Deploying to ${envStage} "
-                            deployImage.to_vsan("${commitId}")
-    }   }   }   }   }   }
+                               sh "ls"
+        }   }   }   }   }
     post {
         always{
             node("Docker"){
-                TelegramNotif(currentBuild.currentResult) 
+
 	}   }
 	failure{
             node(nodeName as String){
